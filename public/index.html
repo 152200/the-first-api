@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API Interaction</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      input,
+      button {
+        margin: 5px;
+        padding: 10px;
+        font-size: 1em;
+      }
+      pre {
+        background-color: #f4f4f4;
+        padding: 10px;
+        border: 1px solid #ccc;
+        overflow-x: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Interact with API</h1>
+    <section>
+      <h2>Get All Users</h2>
+      <button onclick="getUsers()">Get Users</button>
+      <pre id="allUsers"></pre>
+    </section>
+    <section>
+      <h2>Get User by ID</h2>
+      <input type="number" id="userId" placeholder="User ID" />
+      <button onclick="getUser()">Get User</button>
+      <pre id="singleUser"></pre>
+    </section>
+    <section>
+      <h2>Add New User</h2>
+      <input type="text" id="userName" placeholder="Name" />
+      <input type="email" id="userEmail" placeholder="Email" />
+      <button onclick="addUser()">Add User</button>
+      <pre id="newUser"></pre>
+    </section>
+    <section>
+      <h2>Update User</h2>
+      <input type="number" id="updateUserId" placeholder="User ID" />
+      <input type="text" id="updateUserName" placeholder="Name" />
+      <input type="email" id="updateUserEmail" placeholder="Email" />
+      <button onclick="updateUser()">Update User</button>
+      <pre id="updatedUser"></pre>
+    </section>
+    <section>
+      <h2>Delete User</h2>
+      <input type="number" id="deleteUserId" placeholder="User ID" />
+      <button onclick="deleteUser()">Delete User</button>
+      <pre id="deletedUser"></pre>
+    </section>
+
+    <script>
+      async function getUsers() {
+        const response = await fetch("/api/users");
+        const data = await response.json();
+        document.getElementById("allUsers").textContent = JSON.stringify(
+          data,
+          null,
+          2
+        );
+      }
+
+      async function getUser() {
+        const userId = document.getElementById("userId").value;
+        const response = await fetch(`/api/users/${userId}`);
+        const data = await response.json();
+        document.getElementById("singleUser").textContent = JSON.stringify(
+          data,
+          null,
+          2
+        );
+      }
+
+      async function addUser() {
+        const name = document.getElementById("userName").value;
+        const email = document.getElementById("userEmail").value;
+        const response = await fetch("/api/users", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email }),
+        });
+        const data = await response.json();
+        document.getElementById("newUser").textContent = JSON.stringify(
+          data,
+          null,
+          2
+        );
+      }
+
+      async function updateUser() {
+        const id = document.getElementById("updateUserId").value;
+        const name = document.getElementById("updateUserName").value;
+        const email = document.getElementById("updateUserEmail").value;
+        const response = await fetch(`/api/users/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email }),
+        });
+        const data = await response.json();
+        document.getElementById("updatedUser").textContent = JSON.stringify(
+          data,
+          null,
+          2
+        );
+      }
+
+      async function deleteUser() {
+        const userId = document.getElementById("deleteUserId").value;
+        const response = await fetch(`/api/users/${userId}`, {
+          method: "DELETE",
+        });
+        const data = await response.json();
+        document.getElementById("deletedUser").textContent = JSON.stringify(
+          data,
+          null,
+          2
+        );
+      }
+    </script>
+  </body>
+</html>
