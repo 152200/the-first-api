@@ -1,8 +1,10 @@
 const express = require('express');
+const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use(express.static('public'));
 
 let users = [
     { id: 1, name: 'John Doe', email: 'john.doe@example.com' },
@@ -49,3 +51,4 @@ app.delete('/api/users/:id', (req, res) => {
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+
